@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <title>비밀번호 찾기</title>
 
-    <!-- Bootstrap CSS -->
+<%--    <!-- Bootstrap CSS -->--%>
 <%--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--%>
-    <!-- SweetAlert2 CSS -->
-<%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">--%>
+<%--    <!-- SweetAlert2 CSS -->--%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
     <style>
         body {
@@ -40,6 +40,8 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+
+
     <script>
         $(document).ready(function () {
             $('.modal').on('hidden.bs.modal', function (e) {
@@ -60,7 +62,11 @@
                     },
                     success: function (res) {
                         if (res['check']) {
-                            swal("발송 완료!", "입력하신 이메일로 임시비밀번호가 발송되었습니다.", "success").then((OK) => {
+                            Swal.fire({
+                                title: '발송 완료!',
+                                text: '입력하신 이메일로 임시비밀번호가 발송되었습니다.',
+                                icon: 'success'
+                            }).then((OK) => {
                                 if (OK) {
                                     $.ajax({
                                         type: "POST",
@@ -70,7 +76,7 @@
                                             "userName": userName
                                         }
                                     });
-                                    window.location = "home.jsp"; // 로그인 화면으로 이동
+                                    window.location = "/"; // 로그인 화면으로 이동
                                 }
                             });
                             $('#checkMsg').html('<p style="color:darkblue"></p>');

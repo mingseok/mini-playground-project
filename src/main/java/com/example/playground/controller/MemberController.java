@@ -43,7 +43,6 @@ public class MemberController {
 
     @GetMapping("/pwPage")
     public String pwPage() {
-        System.out.println("여기까지 왔어?");
         return "/members/pw";
     }
 

@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
 
-
-
     @Modifying
     @Query("update Member m set m.password = :password where m.id = :id")
     void updatePasswordById(@Param("id") Long id, @Param("password") String password);

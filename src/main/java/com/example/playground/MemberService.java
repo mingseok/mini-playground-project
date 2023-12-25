@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private static final String FROM_ADDRESS = "본인의 이메일 주소를 입력하세요.";
+    private static final String FROM_ADDRESS = "alstjr706@gmail.com";
 
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
@@ -32,6 +33,7 @@ public class MemberService {
      */
 
     // DTO에 사용자가 원하는 내용과 제목을 저장
+    @Transactional
     public MailDto createMailAndChangePassword(String userEmail, String userName){
         String str = getTempPassword();
         MailDto dto = new MailDto();
@@ -43,6 +45,7 @@ public class MemberService {
     }
 
     // 이메일로 발송된 임시비밀번호로 해당 유저의 패스워드 변경
+    @Transactional
     public void updatePassword(String str,String userEmail){
         String pw = EncryptionUtils.encryptMD5(str);
         Optional<Member> member = memberRepository.findByEmail(userEmail);

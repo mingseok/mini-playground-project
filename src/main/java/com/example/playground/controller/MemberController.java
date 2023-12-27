@@ -2,14 +2,18 @@ package com.example.playground.controller;
 
 import com.example.playground.MailDto;
 import com.example.playground.MemberService;
+import com.example.playground.domain.Member;
+import com.example.playground.join.MemberLoginRequestDTO;
 import com.example.playground.signup.MemberRequestDto;
 import com.example.playground.signup.MemberSignupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Controller
@@ -19,13 +23,17 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberSignupService memberSignupService;
 
-    // 회원가입 로직
+    /**
+     * 핵심 로직 아님.
+     */
     @GetMapping("/api/join")
     public String join() {
         return "/members/register";
     }
 
-    // 회원가입 로직
+    /**
+     * 핵심 로직 아님.
+     */
     @PostMapping("/api/register")
     public String  registerMember(@ModelAttribute MemberRequestDto requestDto) {
         memberSignupService.registerMember(requestDto.getName(),
@@ -36,6 +44,24 @@ public class MemberController {
         return "/members/home";
     }
 
+    /**
+     * 핵심 로직 아님.
+     */
+    @PostMapping("/login")
+    public String login(MemberLoginRequestDTO MemberLoginRequestDTO, Model model) {
+        Optional<Member> member = memberService.loginMember(MemberLoginRequestDTO.getName(), MemberLoginRequestDTO.getPassword());
+
+        if (member.isEmpty()) {
+            model.addAttribute("loginMessage", "아이디 혹은 비밀번호가 일치하지 않습니다.");
+            return "/home";
+        }
+        member.map(Member::getName).ifPresent(memberName -> model.addAttribute("memberName", memberName));
+        return "/members/login";
+    }
+
+    /**
+     * 핵심 로직 아님.
+     */
     @GetMapping("/")
     public String home() {
         return "/members/home";

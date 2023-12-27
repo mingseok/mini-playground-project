@@ -25,5 +25,25 @@
     <button type="submit">다른 페이지로 이동</button>
 </form>
 
+
+
+<p>로그인을 해주세요 :)</p>
+
+<form action="/login" method="post">
+    <div>
+        <label for="userId">아이디: </label>
+        <input id="userId" name="name" type="text" required>
+    </div>
+    <div>
+        <label for="password">패스워드: </label>
+        <input id="password" name="password" type="password" required>
+    </div>
+    <input type="submit" value="로그인하기">
+</form>
+
+
+<p>${loginMessage}</p>
+
+
 </body>
 </html>

@@ -2,6 +2,9 @@ package com.example.playground;
 
 import java.security.MessageDigest;
 
+/**
+ * 시큐리티 사용시 작성
+ */
 public class EncryptionUtils {
 
     public static String encryptSHA256(String s) {
@@ -17,8 +20,10 @@ public class EncryptionUtils {
             MessageDigest md = MessageDigest.getInstance(messageDigest);
             byte[] passBytes = s.getBytes();
             md.reset();
+
             byte[] digested = md.digest(passBytes);
             StringBuilder sb = new StringBuilder();
+
             for (int i = 0; i < digested.length; i++)
                 sb.append(Integer.toString((digested[i] & 0xff) + 0x100, 16).substring(1));
             return sb.toString();

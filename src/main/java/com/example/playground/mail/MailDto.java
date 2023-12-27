@@ -1,4 +1,4 @@
-package com.example.playground;
+package com.example.playground.mail;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.playground.signup;
+package com.example.playground.join_login;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

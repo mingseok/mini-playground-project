@@ -1,4 +1,4 @@
-package com.example.playground;
+package com.example.playground.mail;
 
 import java.security.MessageDigest;
 

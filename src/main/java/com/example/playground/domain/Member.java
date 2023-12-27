@@ -6,9 +6,6 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-/**
- * 핵심 클래스 아님
- */
 @Entity
 @Getter
 @Builder

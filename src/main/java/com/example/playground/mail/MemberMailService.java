@@ -1,6 +1,7 @@
-package com.example.playground;
+package com.example.playground.mail;
 
 import com.example.playground.domain.Member;
+import com.example.playground.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,38 +12,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberMailService {
 
     private static final String FROM_ADDRESS = "alstjr706@gmail.com";
 
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
-
-    /**
-     * 핵심 로직 아님.
-     */
-    public boolean userEmailCheck(String userEmail, String userName) {
-        Optional<Member> member = memberRepository.findByEmail(userEmail);
-
-        if (member.isPresent() && member.get().getName().equals(userName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 핵심 로직 아님.
-     */
-    public Optional<Member> loginMember(String name, String password) {
-        Optional<Member> member = memberRepository.selectMember(name, password);
-        return member;
-    }
-
-
-    /**
-     * 여기서 부턴 이메일 만드는 기능 메서드
-     */
 
     // DTO에 사용자가 원하는 내용과 제목을 저장
     @Transactional
@@ -51,7 +26,8 @@ public class MemberService {
         MailDto dto = new MailDto();
         dto.setAddress(userEmail);
         dto.setTitle(userName + "님의 HOTTHINK 임시비밀번호 안내 이메일 입니다.");
-        dto.setMessage("안녕하세요. HOTTHINK 임시비밀번호 안내 관련 이메일 입니다." + "[" + userName + "]" + "님의 임시 비밀번호는 " + str + " 입니다.");
+        dto.setMessage("안녕하세요. HOTTHINK 임시비밀번호 안내 관련 이메일 입니다."
+                + "[" + userName + "]" + "님의 임시 비밀번호는 " + str + " 입니다.");
         updatePassword(str, userEmail);
         return dto;
     }

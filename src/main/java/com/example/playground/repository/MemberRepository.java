@@ -11,17 +11,10 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    /**
-     * 핵심 로직 아님.
-     */
     @Query("select m from Member m where m.name = :name and m.password = :password")
     Optional<Member> selectMember(@Param("name") String name, @Param("password") String password);
 
-    /**
-     * 핵심 로직 아님.
-     */
     Optional<Member> findByEmail(String email);
-
 
     @Modifying
     @Query("update Member m set m.password = :password where m.id = :id")

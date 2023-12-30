@@ -50,7 +50,7 @@
         }
 
         function editProfile() {
-            window.location.href = '/edit-profile';
+            window.location.href = '/mypage';
         }
     </script>
 </head>

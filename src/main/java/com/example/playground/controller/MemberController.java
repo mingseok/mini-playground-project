@@ -1,6 +1,7 @@
 package com.example.playground.controller;
 
 import com.example.playground.domain.Member;
+import com.example.playground.edit.MemberEditResponseDTO;
 import com.example.playground.join_login.MemberLoginRequestDTO;
 import com.example.playground.join_login.MemberRequestDto;
 import com.example.playground.join_login.MemberService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -42,13 +44,15 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(MemberLoginRequestDTO MemberLoginRequestDTO, Model model) {
+    public String login(MemberLoginRequestDTO MemberLoginRequestDTO, HttpSession session, Model model) {
         Optional<Member> member = memberService.loginMember(MemberLoginRequestDTO.getName(), MemberLoginRequestDTO.getPassword());
 
         if (member.isEmpty()) {
             model.addAttribute("loginMessage", "아이디 혹은 비밀번호가 일치하지 않습니다.");
             return "/home";
         }
+
+        session.setAttribute("member", member.get());
         member.map(Member::getName).ifPresent(memberName -> model.addAttribute("memberName", memberName));
         return "/members/login";
     }
@@ -79,6 +83,36 @@ public class MemberController {
         System.out.println("비밀번호 변경 메서드 호출");
         MailDto dto = memberMailService.createMailAndChangePassword(userEmail, userName);
         memberMailService.mailSend(dto);
+    }
+
+    /**
+     * 시작
+     */
+
+    @GetMapping("/mypage")
+    public String myPage(HttpSession session, Model model) {
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        // 로그를 출력하여 member 객체의 값을 확인
+        System.out.println("Member ID: " + member.getId());
+        System.out.println("Member Name: " + member.getName());
+        System.out.println("Member Email: " + member.getEmail());
+        System.out.println("Member Nickname: " + member.getNickname());
+
+
+        model.addAttribute("member", member);
+        return "/members/mypage";
+    }
+
+    @ResponseBody
+    @PutMapping("/edit")
+    public MemberEditResponseDTO memberUpdate(@RequestBody Member member) {
+        memberService.updateMember(member);
+        return new MemberEditResponseDTO(HttpStatus.OK.value());
     }
 
 }

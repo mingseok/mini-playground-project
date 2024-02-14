@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MemberRequestDto {
 
+    // 24.01.15
+    
     private String name;
     private String password;
     private String email;

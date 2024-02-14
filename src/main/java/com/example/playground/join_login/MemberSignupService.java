@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberSignupService {
 
+    // 24.01.28
+
     private final MemberRepository memberRepository;
 
     public Member registerMember(String name, String password, String email, String nickname) {

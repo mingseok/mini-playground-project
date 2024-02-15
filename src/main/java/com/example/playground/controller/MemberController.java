@@ -24,6 +24,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberController {
 
+    //24.02.15
+
     private final MemberService memberService;
     private final MemberSignupService memberSignupService;
     private final MemberMailService memberMailService;

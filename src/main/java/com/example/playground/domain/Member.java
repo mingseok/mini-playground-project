@@ -13,6 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Member implements Serializable {
 
+    //24.02.15
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -7,15 +7,16 @@
     overflow: hidden; /* 스크롤 방지 */
 }
 
-/* 공고 카드 */
+/* 카드 스타일 수정 */
 .job-card {
+    position: relative; /* 내부 요소(.view-count)를 기준으로 위치 조정 */
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: block; /* 카드 레이아웃 유지 */
-    overflow: hidden; /* 카드 내용 초과 방지 */
+    display: block;
+    overflow: hidden;
 }
 
 /* 카드 호버 효과 */
@@ -40,4 +41,27 @@
     .job-card {
         max-width: 100%; /* 모바일에서 카드 가로 제한 해제 */
     }
+}
+
+/* 조회수 스타일 */
+.view-count {
+    position: absolute; /* 카드 내부에서 절대 위치 지정 */
+    top: 10px; /* 카드 상단으로부터의 간격 */
+    right: 10px; /* 카드 오른쪽으로부터의 간격 */
+    background-color: #007bff; /* 배경색 (파란색) */
+    color: white; /* 글자색 (흰색) */
+    font-size: 12px; /* 글자 크기 */
+    font-weight: bold; /* 글자 굵기 */
+    padding: 5px 10px; /* 내부 여백 */
+    border-radius: 12px; /* 둥근 테두리 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 효과 */
+    z-index: 10; /* 다른 요소 위에 표시되도록 설정 */
+}
+
+/* 조회수 호버 효과 */
+.view-count:hover {
+    background-color: #0056b3; /* 호버 시 배경색 (어두운 파란색) */
+    transform: scale(1.1); /* 크기 확대 */
 }

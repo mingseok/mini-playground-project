@@ -1,16 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.querySelector('.grid-container');
     const cards = document.querySelectorAll('.job-card');
-    const containerWidth = container.offsetWidth;
-    const containerHeight = container.offsetHeight;
 
-    // 크기 계산 함수
+    // 크기 계산 함수 (초기 크기 및 증가 단위 조정)
     function calculateSize(views, baseWidth) {
-        const minWidth = baseWidth / 8; // 초기 가로 크기 증가
-        const minHeight = minWidth * 0.75; // 초기 세로 크기 (4:3 비율)
-        const maxWidth = baseWidth / 2; // 최대 가로 크기
+        const minWidth = baseWidth / 16; // 초기 가로 크기 (기존 8 → 16, 크기 줄임)
+        const maxWidth = baseWidth / 3; // 최대 가로 크기
         const step = Math.floor(views / 5); // 5단위 증가
-        const width = Math.min(maxWidth, minWidth + step * (baseWidth / 20)); // 가로 크기 증가
+        const width = Math.min(maxWidth, minWidth + step * (baseWidth / 40)); // 가로 크기 증가 단위 감소
         const height = width * 0.75; // 세로 크기
         return { width, height };
     }
@@ -18,15 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 카드 배치 계산 함수 (중앙 배치 및 간격 확보)
     function calculateCenteredLayout(cards, containerWidth, containerHeight) {
         const layout = [];
-        const gapX = 100; // 가로 간격 증가
-        const gapY = 80; // 세로 간격 증가
+        const gapX = 50; // 가로 간격 조정
+        const gapY = 40; // 세로 간격 조정
         const rowWidthLimit = containerWidth - gapX; // 행 너비 한계
         let currentX = (containerWidth - rowWidthLimit) / 2; // 중앙 정렬 시작 X 좌표
         let currentY = (containerHeight / 2) - 150; // 중앙 정렬 시작 Y 좌표
         let rowHeight = 0;
 
-        cards.forEach((card, index) => {
-            const views = parseInt(card.getAttribute('data-views'), 10);
+        cards.forEach((card) => {
+            const views = parseInt(card.getAttribute('data-views'), 10) || 0;
             const size = calculateSize(views, containerWidth);
 
             // 줄바꿈 처리
@@ -62,9 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 레이아웃 설정 함수
+    function setLayout() {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const initialLayout = calculateCenteredLayout(cards, containerWidth, containerHeight);
+        applyLayout(initialLayout, cards);
+    }
+
     // 초기 레이아웃 설정
-    const initialLayout = calculateCenteredLayout(cards, containerWidth, containerHeight);
-    applyLayout(initialLayout, cards);
+    setLayout();
+
+    // 창 크기 변경 시 레이아웃 재설정
+    window.addEventListener('resize', setLayout);
 
     // 클릭 수 증가 요청 함수
     function increaseClickCount(jobId) {
@@ -79,14 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((updatedJob) => {
                 const card = document.querySelector(`.job-card[data-id="${updatedJob.id}"]`);
-                card.setAttribute('data-views', updatedJob.clickCount);
-                card.querySelector('.view-count').textContent = `조회수: ${updatedJob.clickCount}`;
+                if (card) {
+                    // 조회수 및 data-views 업데이트
+                    card.setAttribute('data-views', updatedJob.clickCount);
+                    card.querySelector('.view-count').textContent = `조회수: ${updatedJob.clickCount}`;
+                }
 
-                // 크기 재계산 후 전체 레이아웃 재배치
-                const updatedLayout = calculateCenteredLayout(cards, containerWidth, containerHeight);
-                applyLayout(updatedLayout, cards);
+                // 레이아웃 재설정
+                setLayout();
             })
-            .catch((error) => console.error(error));
+            .catch((error) => console.error('Error updating click count:', error));
     }
 
     // 클릭 이벤트 리스너 추가

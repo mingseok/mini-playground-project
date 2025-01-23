@@ -12,7 +12,7 @@
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 20px;
+    padding: 10px; /* 여백 축소 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: block; /* 카드 레이아웃 유지 */
     overflow: hidden; /* 카드 내용 초과 방지 */
@@ -42,8 +42,8 @@
 /* 반응형 레이아웃 */
 @media (max-width: 768px) {
     .job-card {
-        width: 180px; /* 작은 화면에서 크기 조정 */
-        height: 135px;
+        width: 150px; /* 작은 화면에서 크기 조정 */
+        height: 112.5px; /* 4:3 비율 */
     }
 }
 

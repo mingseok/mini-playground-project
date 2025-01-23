@@ -2,46 +2,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.querySelector('.grid-container');
     const cards = document.querySelectorAll('.job-card');
 
-    // 크기 계산 함수 (초기 크기 및 증가 단위 조정)
-    function calculateSize(views, baseWidth) {
-        const minWidth = baseWidth / 16; // 초기 가로 크기 (기존 8 → 16, 크기 줄임)
-        const maxWidth = baseWidth / 3; // 최대 가로 크기
+    // 크기 계산 함수 (조회수 기반)
+    function calculateSize(views) {
+        const baseWidth = 150; // 초기 가로 크기
+        const baseHeight = baseWidth * 0.75; // 초기 세로 크기 (4:3 비율)
         const step = Math.floor(views / 5); // 5단위 증가
-        const width = Math.min(maxWidth, minWidth + step * (baseWidth / 40)); // 가로 크기 증가 단위 감소
+        const maxWidth = 300; // 최대 가로 크기
+        const width = Math.min(maxWidth, baseWidth + step * 30); // 가로 크기 증가
         const height = width * 0.75; // 세로 크기
         return { width, height };
     }
 
-    // 카드 배치 계산 함수 (중앙 배치 및 간격 확보)
-    function calculateCenteredLayout(cards, containerWidth, containerHeight) {
+    // 카드 배치 계산 함수 (겹침 방지 처리)
+    function calculateGridLayout(cards, containerWidth, containerHeight) {
         const layout = [];
-        const gapX = 50; // 가로 간격 조정
-        const gapY = 40; // 세로 간격 조정
-        const rowWidthLimit = containerWidth - gapX; // 행 너비 한계
-        let currentX = (containerWidth - rowWidthLimit) / 2; // 중앙 정렬 시작 X 좌표
-        let currentY = (containerHeight / 2) - 150; // 중앙 정렬 시작 Y 좌표
-        let rowHeight = 0;
+        const rows = 3; // Y축 행 수
+        const cols = 5; // X축 열 수
+        const baseGapX = 50; // 기본 가로 간격
+        const baseGapY = 50; // 기본 세로 간격
 
-        cards.forEach((card) => {
+        const rowHeights = new Array(rows).fill(0); // 각 행의 최대 높이
+        const colWidths = new Array(cols).fill(0); // 각 열의 최대 너비
+
+        // 초기 위치 계산 (카드 크기 반영 전)
+        cards.forEach((card, index) => {
             const views = parseInt(card.getAttribute('data-views'), 10) || 0;
-            const size = calculateSize(views, containerWidth);
+            const size = calculateSize(views);
 
-            // 줄바꿈 처리
-            if (currentX + size.width > rowWidthLimit) {
-                currentX = (containerWidth - rowWidthLimit) / 2; // 다음 행 시작 X 좌표
-                currentY += rowHeight + gapY; // 다음 행 Y 좌표
-                rowHeight = 0;
-            }
+            const row = Math.floor(index / cols); // 행 번호
+            const col = index % cols; // 열 번호
+
+            const prevRowHeight = row > 0 ? rowHeights.slice(0, row).reduce((sum, h) => sum + h, 0) : 0;
+            const prevColWidth = col > 0 ? colWidths.slice(0, col).reduce((sum, w) => sum + w, 0) : 0;
+
+            // 기존 카드와 겹치는 경우 간격 조정
+            const gapX = col > 0 && size.width + baseGapX > colWidths[col - 1] ? size.width / 4 : baseGapX;
+            const gapY = row > 0 && size.height + baseGapY > rowHeights[row - 1] ? size.height / 4 : baseGapY;
 
             layout.push({
-                x: currentX,
-                y: currentY,
+                x: prevColWidth + gapX, // X 좌표
+                y: prevRowHeight + gapY, // Y 좌표
                 width: size.width,
                 height: size.height,
             });
 
-            currentX += size.width + gapX; // 다음 카드 X 좌표
-            rowHeight = Math.max(rowHeight, size.height); // 행 높이 업데이트
+            rowHeights[row] = Math.max(rowHeights[row], size.height + gapY); // 행 높이 업데이트
+            colWidths[col] = Math.max(colWidths[col], size.width + gapX); // 열 너비 업데이트
+        });
+
+        // 그리드 중앙 정렬
+        const totalWidth = colWidths.reduce((sum, w) => sum + w, 0);
+        const totalHeight = rowHeights.reduce((sum, h) => sum + h, 0);
+        const offsetX = (containerWidth - totalWidth) / 2; // X축 중앙 기준
+        const offsetY = (containerHeight - totalHeight) / 2; // Y축 중앙 기준
+
+        layout.forEach(pos => {
+            pos.x += offsetX;
+            pos.y += offsetY;
         });
 
         return layout;
@@ -63,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function setLayout() {
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
-        const initialLayout = calculateCenteredLayout(cards, containerWidth, containerHeight);
-        applyLayout(initialLayout, cards);
+        const layout = calculateGridLayout(cards, containerWidth, containerHeight);
+        applyLayout(layout, cards);
     }
 
     // 초기 레이아웃 설정
@@ -87,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((updatedJob) => {
                 const card = document.querySelector(`.job-card[data-id="${updatedJob.id}"]`);
                 if (card) {
-                    // 조회수 및 data-views 업데이트
+                    // 조회수 업데이트
                     card.setAttribute('data-views', updatedJob.clickCount);
                     card.querySelector('.view-count').textContent = `조회수: ${updatedJob.clickCount}`;
                 }

@@ -73,6 +73,21 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.position = "absolute";
             card.style.left = `${pos.x}px`;
             card.style.top = `${pos.y}px`;
+
+            // 글자 크기 동적 설정
+            const fontSize = Math.max(12, (pos.width / 10)); // 글자 크기 비율 설정
+            card.style.fontSize = `${fontSize}px`;
+
+            // 제목, 회사명, 위치, 설명 별도 스타일 크기 비율 적용
+            const titleElement = card.querySelector("h2");
+            const companyElement = card.querySelector(".company");
+            const locationElement = card.querySelector(".location");
+            const descriptionElement = card.querySelector(".description");
+
+            if (titleElement) titleElement.style.fontSize = `${fontSize * 1.2}px`; // 제목은 1.2배
+            if (companyElement) companyElement.style.fontSize = `${fontSize}px`; // 회사명 기본 크기
+            if (locationElement) locationElement.style.fontSize = `${fontSize * 0.9}px`; // 위치는 약간 작게
+            if (descriptionElement) descriptionElement.style.fontSize = `${fontSize * 0.8}px`; // 설명은 더 작게
         });
     }
 

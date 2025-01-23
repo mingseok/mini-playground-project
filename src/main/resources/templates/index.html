@@ -10,7 +10,7 @@
 
 <div class="grid-container">
     <div class="job-card" th:each="job : ${jobPostings}"
-         th:attr="data-id=${job.id}, data-views=${job.clickCount}, data-width=${job.width}, data-height=${job.height}">
+         th:attr="data-id=${job.id}, data-views=${job.clickCount}">
         <span class="view-count" th:text="'조회수: ' + ${job.clickCount}"></span>
         <h2 th:text="${job.title}"></h2>
         <p class="company" th:text="${job.company}"></p>

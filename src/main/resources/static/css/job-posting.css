@@ -1,29 +1,21 @@
-/* 페이지 중앙 배치를 위한 컨테이너 */
+/* 전체 컨테이너 */
 .grid-container {
-    display: grid;
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 유동적인 열 구성 */
-    gap: 30px; /* 공고 간의 간격 */
-    padding: 50px 0; /* 상하 여백 추가 */
-    height: 100vh; /* 전체 화면 높이 설정 */
-    background-color: #f8f9fa; /* 배경색 추가 (선택 사항) */
-    overflow: auto; /* 스크롤 허용 */
+    position: relative;
+    width: 100%;
+    height: 100vh; /* 화면 높이 */
+    background-color: #f8f9fa; /* 배경색 */
+    overflow: hidden; /* 스크롤 방지 */
 }
 
-/* 개별 공고 카드 */
+/* 공고 카드 */
 .job-card {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    display: block; /* 레이아웃 깨짐 방지 */
-    max-width: 300px; /* 카드 최대 크기 */
-    aspect-ratio: 4 / 3; /* 직사각형 비율 유지 */
-    overflow: hidden; /* 내용 초과 방지 */
-    margin: 0 auto; /* 카드 정렬 */
+    display: block; /* 카드 레이아웃 유지 */
+    overflow: hidden; /* 카드 내용 초과 방지 */
 }
 
 /* 랜덤한 회전 효과 */
@@ -34,9 +26,9 @@
     transform: rotate(2deg); /* 짝수 카드 약간 기울이기 */
 }
 
-/* 호버 시 강조 효과 */
+/* 카드 호버 효과 */
 .job-card:hover {
-    transform: translateY(-5px) scale(1.05) rotate(0deg); /* 기울임 초기화 및 확대 */
+    transform: translateY(-5px) scale(1.05); /* 호버 시 크기 확대 */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -47,9 +39,11 @@
     }
 }
 
+/* 반응형 레이아웃 */
 @media (max-width: 768px) {
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
+    .job-card {
+        width: 180px; /* 작은 화면에서 크기 조정 */
+        height: 135px;
     }
 }
 

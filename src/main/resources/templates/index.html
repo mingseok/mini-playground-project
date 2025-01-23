@@ -15,7 +15,8 @@
         <h2 th:text="${job.title}"></h2>
         <p class="company" th:text="${job.company}"></p>
         <p class="location" th:text="${job.location}"></p>
-        <p class="description" th:text="${job.description}"></p>
+        <p class="description" th:if="${job.clickCount > 4}" th:text="${job.description}"></p>
+        <p class="description" th:if="${job.clickCount <= 4}" th:text="'...'"></p>
     </div>
 </div>
 

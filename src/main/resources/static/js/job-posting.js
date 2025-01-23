@@ -107,6 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 조회수 업데이트
                     card.setAttribute('data-views', updatedJob.clickCount);
                     card.querySelector('.view-count').textContent = `조회수: ${updatedJob.clickCount}`;
+
+                    // description 업데이트 로직
+                    const descriptionElement = card.querySelector('.description');
+                    if (updatedJob.clickCount <= 4) {
+                        descriptionElement.textContent = "...";
+                    } else {
+                        descriptionElement.textContent = updatedJob.description;
+                    }
                 }
 
                 // 레이아웃 재설정

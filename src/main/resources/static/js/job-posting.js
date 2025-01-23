@@ -64,10 +64,55 @@ document.addEventListener('DOMContentLoaded', () => {
         return layout;
     }
 
-    // 레이아웃 적용 함수
+    // 레이아웃 적용 함수 (조회수 조건에 따른 처리 추가)
     function applyLayout(layout, cards) {
         layout.forEach((pos, index) => {
             const card = cards[index];
+            const views = parseInt(card.getAttribute('data-views'), 10) || 0;
+
+            card.style.width = `${pos.width}px`;
+            card.style.height = `${pos.height}px`;
+            card.style.position = "absolute";
+            card.style.left = `${pos.x}px`;
+            card.style.top = `${pos.y}px`;
+
+            // 제목, 회사명, 위치, 설명 업데이트
+            const titleElement = card.querySelector("h2");
+            const companyElement = card.querySelector(".company");
+            const locationElement = card.querySelector(".location");
+            const descriptionElement = card.querySelector(".description");
+
+            // location 처리
+            if (locationElement) {
+                if (views <= 4) {
+                    locationElement.style.display = "none"; // 조회수 0~4일 때 숨김
+                } else {
+                    locationElement.style.display = "block"; // 5 이상일 때 표시
+                    locationElement.textContent = card.getAttribute("data-location") || "";
+                }
+            }
+
+            // description 처리
+            if (descriptionElement) {
+                if (views <= 4) {
+                    descriptionElement.textContent = "..."; // 조회수 0~4일 때 "..." 표시
+                } else {
+                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 5 이상일 때 설명 표시
+                }
+            }
+        });
+    }
+
+    // 레이아웃 설정 함수
+    function setLayout() {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const layout = calculateGridLayout(cards, containerWidth, containerHeight);
+
+        layout.forEach((pos, index) => {
+            const card = cards[index];
+            const views = parseInt(card.getAttribute('data-views'), 10) || 0;
+
             card.style.width = `${pos.width}px`;
             card.style.height = `${pos.height}px`;
             card.style.position = "absolute";
@@ -86,18 +131,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (titleElement) titleElement.style.fontSize = `${fontSize * 1.2}px`; // 제목은 1.2배
             if (companyElement) companyElement.style.fontSize = `${fontSize}px`; // 회사명 기본 크기
-            if (locationElement) locationElement.style.fontSize = `${fontSize * 0.9}px`; // 위치는 약간 작게
-            if (descriptionElement) descriptionElement.style.fontSize = `${fontSize * 0.8}px`; // 설명은 더 작게
+
+            // location 설정
+            if (locationElement) {
+                if (views <= 4) {
+                    locationElement.textContent = ""; // 조회수 0~4일 때 숨김
+                } else {
+                    locationElement.textContent = card.getAttribute("data-location") || ""; // 5 이상일 때 표시
+                }
+            }
+
+            // description 설정
+            if (descriptionElement) {
+                if (views <= 4) {
+                    descriptionElement.textContent = "..."; // 조회수 0~4일 때 "..." 표시
+                } else {
+                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 5 이상일 때 표시
+                }
+            }
         });
     }
 
-    // 레이아웃 설정 함수
-    function setLayout() {
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        const layout = calculateGridLayout(cards, containerWidth, containerHeight);
-        applyLayout(layout, cards);
-    }
 
     // 초기 레이아웃 설정
     setLayout();
@@ -123,12 +177,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.setAttribute('data-views', updatedJob.clickCount);
                     card.querySelector('.view-count').textContent = `조회수: ${updatedJob.clickCount}`;
 
-                    // description 업데이트 로직
+                    // location 업데이트
+                    const locationElement = card.querySelector('.location');
+                    if (locationElement) {
+                        if (updatedJob.clickCount <= 4) {
+                            locationElement.style.display = "none"; // 조회수 0~4일 때 숨김
+                        } else {
+                            locationElement.style.display = "block"; // 5 이상일 때 표시
+                            locationElement.textContent = updatedJob.location;
+                        }
+                    }
+
+                    // description 업데이트
                     const descriptionElement = card.querySelector('.description');
-                    if (updatedJob.clickCount <= 4) {
-                        descriptionElement.textContent = "...";
-                    } else {
-                        descriptionElement.textContent = updatedJob.description;
+                    if (descriptionElement) {
+                        if (updatedJob.clickCount <= 4) {
+                            descriptionElement.textContent = "..."; // 조회수 0~4일 때 "..." 표시
+                        } else {
+                            descriptionElement.textContent = updatedJob.description; // 5 이상일 때 설명 표시
+                        }
                     }
                 }
 

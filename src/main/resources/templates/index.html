@@ -10,13 +10,13 @@
 
 <div class="grid-container">
     <div class="job-card" th:each="job : ${jobPostings}"
-         th:attr="data-id=${job.id}, data-views=${job.clickCount}">
+         th:attr="data-id=${job.id}, data-views=${job.clickCount},
+                  data-description=${job.description}, data-location=${job.location}">
         <span class="view-count" th:text="'조회수: ' + ${job.clickCount}"></span>
-        <h2 th:text="${job.title}"></h2>
+        <p class="title" th:text="${job.title}"></p>
         <p class="company" th:text="${job.company}"></p>
         <p class="location" th:text="${job.location}"></p>
-        <p class="description" th:if="${job.clickCount > 4}" th:text="${job.description}"></p>
-        <p class="description" th:if="${job.clickCount <= 4}" th:text="'...'"></p>
+        <p class="description" th:text="${job.description}"></p>
     </div>
 </div>
 

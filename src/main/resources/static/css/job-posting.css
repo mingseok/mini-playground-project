@@ -3,8 +3,12 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    background-color: #f8f9fa;
+    background-color: #f0f2f5; /* 더 밝은 배경 */
     overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 공고 카드 */
@@ -13,17 +17,22 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 10px;
+    margin: 20px; /* 간격을 늘리기 위해 margin 추가 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    text-overflow: ellipsis; /* 넘치는 텍스트 "..." 처리 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-    white-space: nowrap; /* 한 줄로 표시 */
-
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* 호버 시 효과 */
+.job-card:hover {
+    transform: translateY(-10px) scale(1.05); /* 살짝 위로 올라가고 커짐 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 더 강한 그림자 */
 }
 
 /* 조회수 스타일 */
@@ -33,32 +42,57 @@
     right: 10px;
     font-size: 0.8em;
     font-weight: bold;
-    color: gray;
+    color: #666; /* 중간 회색 */
+    background-color: rgba(0, 0, 0, 0.05); /* 살짝 어두운 배경 */
+    padding: 4px 8px;
+    border-radius: 8px;
 }
 
 /* 카드 제목 */
-.job-card h2 {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 20px 0 5px; /* 조회수와 겹치지 않도록 위쪽 마진 조정 */
+.job-card .title {
+    font-size: 1.2em; /* 적당한 크기로 조정 */
+    font-weight: bold; /* 굵은 글씨 */
+    margin: 30px 0 10px; /* 간격 조정 */
     text-align: center;
+    color: #333; /* 제목 색상 */
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap; /* 한 줄로 제한 */
 }
 
-/* 카드 내용 */
-.job-card p {
+/* 카드 회사명 */
+.job-card .company {
+    font-size: 1em;
+    color: #555;
+    margin: 10px 0; /* 위아래 여백 조정 */
+    text-align: center;
+}
+
+/* 카드 위치 */
+.job-card .location {
     font-size: 0.9em;
-    margin: 2px 0;
+    color: #777;
+    margin: 4px 0;
     text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-/* 카드 호버 효과 */
-.job-card:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+/* 카드 설명 */
+.job-card .description {
+    font-size: 0.8em;
+    color: #999; /* 더 연한 색 */
+    margin: 10px 0 0;
+    text-align: center;
+}
+
+/* 반응형 레이아웃 */
+@media (max-width: 768px) {
+    .job-card {
+        width: 80%; /* 작은 화면에서 카드 너비 조정 */
+    }
+}
+
+@media (max-width: 576px) {
+    .job-card {
+        width: 90%; /* 모바일에서 카드 더 작게 */
+    }
 }

@@ -21,18 +21,12 @@ public class JobPostingService {
     }
 
     public JobPostingDto increaseClickCount(Long id, int baseWidth) {
-        try {
-            JobPosting jobPosting = jobPostingRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Job Posting not found: " + id));
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Job Posting not found: " + id));
 
-            jobPosting.incrementClickCount();
-            jobPostingRepository.save(jobPosting);
+        jobPosting.incrementClickCount();
+        jobPostingRepository.save(jobPosting);
 
-            return JobPostingDto.fromEntity(jobPosting, baseWidth);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Job Posting not found: " + id, e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update click count for Job Posting ID: " + id, e);
-        }
+        return JobPostingDto.fromEntity(jobPosting, baseWidth);
     }
 }

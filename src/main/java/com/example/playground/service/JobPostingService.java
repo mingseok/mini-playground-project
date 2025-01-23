@@ -16,14 +16,8 @@ public class JobPostingService {
 
     public List<JobPostingDto> getAllJobPostings() {
         return jobPostingRepository.findAll().stream()
-                .map(job -> JobPostingDto.fromEntity(job, 1024)) // clickCount 포함
+                .map(job -> JobPostingDto.fromEntity(job, 1024))
                 .collect(Collectors.toList());
-    }
-
-    public JobPostingDto getJobPostingById(Long id) {
-        JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Job Posting not found: " + id));
-        return JobPostingDto.fromEntity(jobPosting, 1024);
     }
 
     public JobPostingDto increaseClickCount(Long id, int baseWidth) {
@@ -40,36 +34,5 @@ public class JobPostingService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to update click count for Job Posting ID: " + id, e);
         }
-    }
-
-    public JobPostingDto createJobPosting(JobPostingDto jobPostingDto) {
-        JobPosting jobPosting = new JobPosting(
-                jobPostingDto.getTitle(),
-                jobPostingDto.getCompany(),
-                jobPostingDto.getLocation(),
-                jobPostingDto.getDescription()
-        );
-        jobPosting = jobPostingRepository.save(jobPosting);
-        return JobPostingDto.fromEntity(jobPosting, 1024);
-    }
-
-    public JobPostingDto updateJobPosting(Long id, JobPostingDto jobPostingDto) {
-        JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Job Posting not found: " + id));
-
-        jobPosting.updateTitle(jobPostingDto.getTitle());
-        jobPosting.updateCompany(jobPostingDto.getCompany());
-        jobPosting.updateLocation(jobPostingDto.getLocation());
-        jobPosting.updateDescription(jobPostingDto.getDescription());
-
-        jobPosting = jobPostingRepository.save(jobPosting);
-        return JobPostingDto.fromEntity(jobPosting, 1024);
-    }
-
-    public void deleteJobPosting(Long id) {
-        if (!jobPostingRepository.existsById(id)) {
-            throw new IllegalArgumentException("Job Posting not found: " + id);
-        }
-        jobPostingRepository.deleteById(id);
     }
 }

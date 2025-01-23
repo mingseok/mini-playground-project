@@ -14,17 +14,16 @@
     </div>
 </nav>
 
-<div class="grid-container">
-    <!-- 채용 공고 카드 -->
-    <div class="job-card" th:each="job : ${jobPostings}"
-         th:attr="data-id=${job.id}, data-views=${job.clickCount}">
-        <span class="view-count" th:text="'조회수: ' + ${job.clickCount}"></span>
-        <h2 th:text="${job.title}"></h2>
-        <p class="company" th:text="${job.company}"></p>
-        <p class="location" th:text="${job.location}"></p>
-        <p class="description" th:text="${job.description}"></p>
-    </div>
+
+<div class="job-card" th:each="job : ${jobPostings}"
+     th:attr="data-id=${job.id}, data-views=${job.clickCount}, data-width=${job.width}, data-height=${job.height}">
+    <span class="view-count" th:text="'조회수: ' + ${job.clickCount}"></span>
+    <h2 th:text="${job.title}"></h2>
+    <p class="company" th:text="${job.company}"></p>
+    <p class="location" th:text="${job.location}"></p>
+    <p class="description" th:text="${job.description}"></p>
 </div>
+
 
 
 <!-- JavaScript 파일 경로 -->

@@ -30,23 +30,6 @@ public class JobPosting {
         this.clickCount = 0; // 초기 클릭 수는 0
     }
 
-    // 업데이트 메서드
-    public void updateTitle(String title) {
-        this.title = title;
-    }
-
-    public void updateCompany(String company) {
-        this.company = company;
-    }
-
-    public void updateLocation(String location) {
-        this.location = location;
-    }
-
-    public void updateDescription(String description) {
-        this.description = description;
-    }
-
     public void incrementClickCount() {
         this.clickCount += 1;
     }

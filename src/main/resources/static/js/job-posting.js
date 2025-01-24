@@ -76,13 +76,28 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.left = `${pos.x}px`;
             card.style.top = `${pos.y}px`;
 
-            // 제목, 회사명, 위치, 설명 업데이트
-            const titleElement = card.querySelector("h2");
+            // 글자 크기 동적 설정
+            const fontSize = Math.max(12, (pos.width / 10));
+            card.style.fontSize = `${fontSize}px`;
+
+            // 제목, 회사명, 위치, 설명 별도 스타일 크기 비율 적용
+            const titleElement = card.querySelector(".title");
             const companyElement = card.querySelector(".company");
             const locationElement = card.querySelector(".location");
             const descriptionElement = card.querySelector(".description");
 
-            // location 처리
+            // 제목 처리 (title)
+            if (titleElement) {
+                titleElement.style.display = "block"; // 항상 보이도록 설정
+                titleElement.textContent = card.getAttribute("data-title") || "Untitled"; // 초기값 설정
+            }
+
+            // 회사명 처리 (company)
+            if (companyElement) {
+                companyElement.style.fontSize = `${fontSize}px`;
+            }
+
+            // location 설정
             if (locationElement) {
                 if (views <= 4) {
                     locationElement.style.display = "none"; // 조회수 0~4일 때 숨김
@@ -92,12 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // description 처리
+            // description 설정
             if (descriptionElement) {
                 if (views <= 4) {
-                    descriptionElement.textContent = "..."; // 조회수 0~4일 때 "..." 표시
+                    descriptionElement.textContent = "..."; // 강조 표시용
                 } else {
-                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 5 이상일 때 설명 표시
+                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 본문 출력
                 }
             }
         });
@@ -124,20 +139,27 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.fontSize = `${fontSize}px`;
 
             // 제목, 회사명, 위치, 설명 별도 스타일 크기 비율 적용
-            const titleElement = card.querySelector("h2");
+            const titleElement = card.querySelector(".title");
             const companyElement = card.querySelector(".company");
             const locationElement = card.querySelector(".location");
             const descriptionElement = card.querySelector(".description");
 
-            if (titleElement) titleElement.style.fontSize = `${fontSize * 1.2}px`; // 제목은 1.2배
+            // 제목 설정 (항상 출력)
+            if (titleElement) {
+                titleElement.style.display = "block"; // 항상 보이도록 설정
+                titleElement.textContent = card.getAttribute("data-title") || "Untitled"; // 데이터 없을 때 기본값
+                titleElement.style.fontSize = `${fontSize * 1.2}px`; // 제목 크기 조정
+            }
+
             if (companyElement) companyElement.style.fontSize = `${fontSize}px`; // 회사명 기본 크기
 
             // location 설정
             if (locationElement) {
                 if (views <= 4) {
-                    locationElement.textContent = ""; // 조회수 0~4일 때 숨김
+                    locationElement.style.display = "none"; // 조회수 0~4일 때 숨김
                 } else {
-                    locationElement.textContent = card.getAttribute("data-location") || ""; // 5 이상일 때 표시
+                    locationElement.style.display = "block"; // 5 이상일 때 표시
+                    locationElement.textContent = card.getAttribute("data-location") || "";
                 }
             }
 
@@ -150,6 +172,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        // applyLayout 호출 (레이아웃 적용)
+        applyLayout(layout, cards);
     }
 
 

@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.querySelector('.grid-container');
     const cards = document.querySelectorAll('.job-card');
 
+    // 랜덤 색상 배열
+    const postItColors = ['#FFF6B8', '#FFD3B8', '#A9D4FF', '#FFC2C2', '#F4E2FF'];
+
+    // 카드에 랜덤 배경색 적용
+    cards.forEach(card => {
+        const randomColor = postItColors[Math.floor(Math.random() * postItColors.length)];
+        card.style.backgroundColor = randomColor; // **랜덤 배경색 추가**
+    });
+
+
     // 크기 계산 함수 (조회수 기반)
     function calculateSize(views) {
         const baseWidth = 150; // 초기 가로 크기

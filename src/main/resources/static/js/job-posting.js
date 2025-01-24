@@ -88,13 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 제목 처리 (title)
             if (titleElement) {
-                titleElement.style.display = "block"; // 항상 보이도록 설정
-                titleElement.textContent = card.getAttribute("data-title") || "Untitled"; // 초기값 설정
+                titleElement.style.display = "block";
+                titleElement.textContent = card.getAttribute("data-title") || "Untitled";
+                titleElement.style.fontSize = `${fontSize * 1.2}px`;
+                adjustFontSize(titleElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
             }
 
-            // 회사명 처리 (company)
             if (companyElement) {
                 companyElement.style.fontSize = `${fontSize}px`;
+                adjustFontSize(companyElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
             }
 
             // location 설정
@@ -110,12 +112,26 @@ document.addEventListener('DOMContentLoaded', () => {
             // description 설정
             if (descriptionElement) {
                 if (views <= 4) {
-                    descriptionElement.textContent = "..."; // 강조 표시용
+                    descriptionElement.textContent = "...";
                 } else {
-                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 본문 출력
+                    descriptionElement.textContent = card.getAttribute("data-description") || "";
+                    adjustFontSize(descriptionElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
                 }
             }
         });
+    }
+
+    function adjustFontSize(element, maxWidth) {
+        const initialFontSize = parseFloat(window.getComputedStyle(element).fontSize);
+        let currentFontSize = initialFontSize;
+        element.style.whiteSpace = "nowrap"; // 줄바꿈 비활성화
+
+        while (element.scrollWidth > maxWidth && currentFontSize > 12) {
+            currentFontSize -= 1;
+            element.style.fontSize = `${currentFontSize}px`;
+        }
+
+        element.style.whiteSpace = "normal"; // 줄바꿈 활성화
     }
 
     // 레이아웃 설정 함수
@@ -146,12 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 제목 설정 (항상 출력)
             if (titleElement) {
-                titleElement.style.display = "block"; // 항상 보이도록 설정
-                titleElement.textContent = card.getAttribute("data-title") || "Untitled"; // 데이터 없을 때 기본값
-                titleElement.style.fontSize = `${fontSize * 1.2}px`; // 제목 크기 조정
+                titleElement.style.display = "block";
+                titleElement.textContent = card.getAttribute("data-title") || "Untitled";
+                titleElement.style.fontSize = `${fontSize * 1.2}px`;
+                adjustFontSize(titleElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
             }
 
-            if (companyElement) companyElement.style.fontSize = `${fontSize}px`; // 회사명 기본 크기
+            if (companyElement) {
+                companyElement.style.fontSize = `${fontSize}px`;
+                adjustFontSize(companyElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
+            }
 
             // location 설정
             if (locationElement) {
@@ -163,12 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // description 설정
             if (descriptionElement) {
                 if (views <= 4) {
-                    descriptionElement.textContent = "..."; // 조회수 0~4일 때 "..." 표시
+                    descriptionElement.textContent = "...";
                 } else {
-                    descriptionElement.textContent = card.getAttribute("data-description") || ""; // 5 이상일 때 표시
+                    descriptionElement.textContent = card.getAttribute("data-description") || "";
+                    adjustFontSize(descriptionElement, pos.width - 20); // 카드 폭에 맞춰 글자 크기 조정
                 }
             }
         });

@@ -12,21 +12,15 @@ public class JobPostingDto {
     private final String company;
     private final String location;
     private final String description;
-    private final int width;
-    private final int height;
     private final int clickCount;
 
-    public static JobPostingDto fromEntity(JobPosting jobPosting, int baseWidth) {
-        int[] size = jobPosting.getAdjustedSize(baseWidth);
-
+    public static JobPostingDto fromEntity(JobPosting jobPosting) {
         return JobPostingDto.builder()
                 .id(jobPosting.getId())
                 .title(jobPosting.getTitle())
                 .company(jobPosting.getCompany())
                 .location(jobPosting.getLocation())
                 .description(jobPosting.getDescription())
-                .width(size[0])
-                .height(size[1])
                 .clickCount(jobPosting.getClickCount())
                 .build();
     }

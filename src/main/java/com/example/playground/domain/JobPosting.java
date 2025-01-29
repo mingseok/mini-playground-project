@@ -24,16 +24,4 @@ public class JobPosting {
     public void incrementClickCount() {
         this.clickCount++;
     }
-
-    public int[] getAdjustedSize(int baseWidth) {
-        int step = 5;
-        int minSize = 150;
-        int sizeIncrement = 50;
-        int maxSize = 400;
-
-        int stepLevel = Math.floorDiv(clickCount, step);
-        int size = Math.min(maxSize, minSize + stepLevel * sizeIncrement);
-
-        return new int[]{size, (int) (size * 0.75)};
-    }
 }

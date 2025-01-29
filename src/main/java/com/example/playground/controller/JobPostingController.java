@@ -21,8 +21,7 @@ public class JobPostingController {
 
     @PostMapping("/api/job-postings/{id}/click")
     public ResponseEntity<JobPostingDto> increaseClickCount(@PathVariable("id") Long id) {
-        int baseWidth = 1024; // 기준 화면 너비
-        JobPostingDto updatedPosting = jobPostingService.increaseClickCount(id, baseWidth);
+        JobPostingDto updatedPosting = jobPostingService.increaseClickCount(id);
         return ResponseEntity.ok(updatedPosting);
     }
 }

@@ -10,23 +10,30 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.backgroundColor = randomColor;
     });
 
-    // 크기 계산 함수
-    function calculateSize(views, baseWidth) {
-        const minSize = baseWidth / 32;
-        const maxSize = baseWidth / 4;
+    // 크기 계산 함수 (조회수 0일 때 더 작은 크기 설정)
+    function calculateSize(views) {
+        // 도화지 규격 (A2~A6)
+        const sizes = [
+            { width: 74, height: 105 }, // 1/16 A6 (초기 기본 크기, 조회수 0일 때)
+            { width: 105, height: 148 }, // A6 (조회수 1)
+            { width: 148, height: 210 }, // A5 (조회수 2)
+            { width: 210, height: 297 }, // A4 (조회수 3)
+            { width: 297, height: 420 }, // A3 (조회수 4)
+            { width: 420, height: 594 }  // A2 (조회수 5, 최대 크기)
+        ];
 
-        let width = minSize;
-        let height = minSize * 0.75;
+        // 기본 크기 (조회수 0일 때)
+        let currentSize = sizes[0];
 
-        for (let i = 1; i <= views; i++) {
-            if (i % 2 === 1) {
-                width = Math.min(maxSize, width * 2);
-            } else {
-                height = Math.min(maxSize * 0.75, height * 2);
-            }
+        // 조회수에 따라 크기 증가 (최대 A2)
+        if (views >= 1 && views < sizes.length) {
+            currentSize = sizes[views]; // 조회수 1부터 증가하도록 조정
         }
 
-        return { width, height };
+        // 크기 정보 콘솔에 출력
+        console.log(`조회수: ${views}, width: ${currentSize.width}, height: ${currentSize.height}`);
+
+        return currentSize;
     }
 
     // 레이아웃 적용 함수
